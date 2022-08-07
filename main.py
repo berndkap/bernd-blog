@@ -12,7 +12,9 @@ from functools import wraps
 from flask import abort
 import os
 
-
+# TEST_KEY = '12345'
+TEST_KEY = os.environ.get("TEST_KEY")
+# print(TEST_KEY)
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", "0814")
@@ -100,7 +102,7 @@ def admin_only(f):
 @app.route('/')
 def get_all_posts():
     posts = BlogPost.query.all()
-    return render_template("index.html", all_posts=posts, current_user=current_user)
+    return render_template("index.html", all_posts=posts, current_user=current_user, test_key=TEST_KEY)
 
 
 @app.route('/register', methods=['GET', 'POST'])
