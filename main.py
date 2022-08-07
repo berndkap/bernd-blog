@@ -11,6 +11,15 @@ from flask_gravatar import Gravatar
 from functools import wraps
 from flask import abort
 import os
+import smtplib
+
+GMAIL_SERVER = "smtp.gmail.com"
+MAIL_FROM = os.environ.get("EMAIL_FROM")
+MAIL_TO = os.environ.get("EMAIL_TO")
+EMAIL_PW = os.environ.get("EMAIL_PW")
+
+
+
 
 # TEST_KEY = '12345'
 TEST_KEY = os.environ.get("TEST_KEY")
@@ -185,9 +194,27 @@ def about():
     return render_template("about.html")
 
 
-@app.route("/contact")
+@app.route("/contact", methods=['GET', 'POST'])
 def contact():
-    return render_template("contact.html")
+    if request.method == "POST":
+        data = request.form
+        name = data["username"]
+        email = data["email"]
+        phone = data["phone"]
+        text = data["text"]
+
+        text_content = f"Name: {name} \nEmail: {email} \nPhone:{phone} \nText: {text}"
+        message = f"Subject:New Contact\n\n{text_content}"
+        print(text_content)
+
+        server = smtplib.SMTP(GMAIL_SERVER)
+        server.starttls()
+        server.login(MAIL_FROM, EMAIL_PW)
+        server.sendmail(MAIL_FROM, MAIL_TO, message)
+        server.close()
+
+        return render_template("contact.html", msg_sent=True)
+    return render_template("contact.html", msg_sent=False)
 
 
 @app.route("/new-post", methods=['GET', 'POST'])
