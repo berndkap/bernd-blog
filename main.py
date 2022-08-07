@@ -17,7 +17,7 @@ TEST_KEY = os.environ.get("TEST_KEY")
 # print(TEST_KEY)
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", "0814")
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
 ckeditor = CKEditor(app)
 Bootstrap(app)
 
