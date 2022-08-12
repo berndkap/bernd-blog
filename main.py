@@ -18,11 +18,11 @@ MAIL_FROM = os.environ.get("EMAIL_FROM")
 MAIL_TO = os.environ.get("EMAIL_TO")
 EMAIL_PW = os.environ.get("EMAIL_PW")
 
-
+ADMIN_LIST = [1, 2, 4, 5]
 
 
 # TEST_KEY = '12345'
-TEST_KEY = os.environ.get("TEST_KEY")
+# TEST_KEY = os.environ.get("TEST_KEY")
 # print(TEST_KEY)
 
 app = Flask(__name__)
@@ -102,7 +102,7 @@ db.create_all()
 def admin_only(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
-        if current_user.id != 1:
+        if current_user.id not in ADMIN_LIST:
             return abort(403)
         return f(*args, **kwargs)
     return decorated_function
@@ -111,7 +111,7 @@ def admin_only(f):
 @app.route('/')
 def get_all_posts():
     posts = BlogPost.query.all()
-    return render_template("index.html", all_posts=posts, current_user=current_user, test_key=TEST_KEY)
+    return render_template("index.html", all_posts=posts, current_user=current_user, admin_list=ADMIN_LIST)
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -186,7 +186,7 @@ def show_post(post_id):
         db.session.commit()
         return redirect(url_for("get_all_posts"))
 
-    return render_template("post.html", post=requested_post, current_user=current_user, form=form)
+    return render_template("post.html", post=requested_post, current_user=current_user, form=form, admin_list=ADMIN_LIST)
 
 
 @app.route("/about")
