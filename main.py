@@ -111,6 +111,7 @@ def admin_only(f):
 @app.route('/')
 def get_all_posts():
     posts = BlogPost.query.all()
+    posts.sort(key=lambda x: x.date, reverse=True)
     return render_template("index.html", all_posts=posts, current_user=current_user, admin_list=ADMIN_LIST)
 
 
