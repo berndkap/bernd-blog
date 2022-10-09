@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, flash, request
 from flask_bootstrap import Bootstrap
 from flask_ckeditor import CKEditor
-from datetime import date
+from datetime import date, datetime
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship
@@ -111,7 +111,14 @@ def admin_only(f):
 @app.route('/')
 def get_all_posts():
     posts = BlogPost.query.all()
-    posts.sort(key=lambda x: x.date, reverse=True)
+
+    # print(type(posts[0].date))
+    # date_format = datetime.strptime('Jun 1 2005', '%b %d %Y')
+    # date_format_1 = datetime.strptime(posts[0].date, '%B %d, %Y')
+    # print(date_format)
+    # print(date_format_1)
+    # posts.sort(key=lambda x: x.date, reverse=True)
+    posts.sort(key=lambda x: datetime.strptime(x.date, '%B %d, %Y'), reverse=True)
     return render_template("index.html", all_posts=posts, current_user=current_user, admin_list=ADMIN_LIST)
 
 
