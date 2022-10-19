@@ -274,6 +274,11 @@ def delete_post(post_id):
     db.session.commit()
     return redirect(url_for('get_all_posts'))
 
+@app.route ("/check_delete/<int:post_id>")
+@admin_only
+def check_delete(post_id):
+    post_to_delete = BlogPost.query.get(post_id)
+    return render_template("check_delete.html", post=post_to_delete)
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -19,35 +19,33 @@
   <div class="container">
     <div class="row">
       <div class="col-lg-8 col-md-10 mx-auto">
-        {% for post in all_posts %}
+
         <div class="post-preview">
-          <a href="{{ url_for('show_post', post_id=post.id) }}">
+<!--          <a href="{{ url_for('show_post', post_id=post.id) }}">-->
+            <h1 style="color:red;">Caution !!!</h1>
+            <br>
             <h2 class="post-title">
               {{post.title}}
             </h2>
             <h3 class="post-subtitle">
               {{post.subtitle}}
             </h3>
-          </a>
+<!--          </a>-->
           <p class="post-meta">Posted by
             <a href="#"> {{ post.author.name }} </a>
             on {{post.date}}
             {% if current_user.id == post.author.id %}
-            <a href="{{url_for('check_delete', post_id=post.id) }}">✘</a>
+            <br>
+              <h5 style="color:red;">really delete unrecoverable?</h5>
+            <a href="{{url_for('delete_post', post_id=post.id) }}">Yes, delete!</a>
+            <br>
+            <a href="{{url_for('get_all_posts', post_id=post.id) }}">No !</a>
             {% endif %}
-          
+
           </p>
         </div>
         <hr>
-        {% endfor %}
 
-
-        <!-- New Post -->
-        <div class="clearfix">
-          {% if current_user.id in admin_list %}
-          <a class="btn btn-primary float-right" href="{{url_for('add_new_post')}}">Create New Post</a>
-          {% endif %}
-        </div>
       </div>
     </div>
   </div>
